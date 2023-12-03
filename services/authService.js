@@ -1,11 +1,12 @@
 const bcrypt = require('bcrypt');
 
 const jwt = require('../lib/jsonwebtoken');
+const User = require('../models/User');
 
 const SECRET = 'kdsak5665sdd';
 
 exports.login = async (email, password) => {
-	const user = await this.findByEmail(email);
+	const user = await User.findOne({ email });
 
 	if (!user) {
 		throw new Error('Invalid email or password!');
@@ -19,24 +20,21 @@ exports.login = async (email, password) => {
 
 	const payload = {
 		_id: user._id,
-		email
+		email: user.email
 	};
 
 	const token = await jwt.sign(payload, SECRET);
 
-	return token;
+	return {
+		_id: user._id,
+		email: user.email,
+		accessToken: token
+	};
 }
 
-exports.register = async (email, password, rePass) => {
-	if (password !== rePass) {
-		throw new Error('Password missmatch!');
-	}
+exports.register = async (email, password) => {
 
-	const existingUser = await User.findOne({
-		$or: [
-			{ email }
-		]
-	});
+	const existingUser = await User.findOne({ email });
 
 	if (existingUser) {
 		throw new Error('User exists!');

@@ -22,4 +22,20 @@ router.post('/', async (req, res) => {
 	res.json({ _id: product._id });
 });
 
+router.put('/:productId', async (req, res) => {
+
+	const data = req.body;
+
+	await productService.update(req.params.productId, data);
+
+	res.json({ data });
+});
+
+router.delete('/:productId', async (req, res) => {
+
+	await productService.delete(req.params.productId);
+
+	res.json({ ok: true });
+});
+
 module.exports = router;

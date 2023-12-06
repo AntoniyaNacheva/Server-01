@@ -8,10 +8,16 @@ router.get('/', async (req, res) => {
 	res.json(products);
 });
 
+router.get('/:productId', async (req, res) => {
+	const product = await productService.getOne(req.params.productId);
+
+	res.json(product);
+});
+
 router.post('/', async (req, res) => {
 	const data = req.body;
 
-	const product = await productService.create(data);
+	const product = await productService.create(req.user._id, data);
 
 	res.json({ _id: product._id });
 });

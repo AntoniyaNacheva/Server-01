@@ -2,8 +2,7 @@ const bcrypt = require('bcrypt');
 
 const jwt = require('../lib/jsonwebtoken');
 const User = require('../models/User');
-
-const SECRET = 'kdsak5665sdd';
+require('dotenv').config();
 
 exports.login = async (email, password) => {
 	const user = await User.findOne({ email });
@@ -23,7 +22,7 @@ exports.login = async (email, password) => {
 		email: user.email
 	};
 
-	const token = await jwt.sign(payload, SECRET);
+	const token = await jwt.sign(payload, process.env.SECRET);
 
 	return {
 		_id: user._id,

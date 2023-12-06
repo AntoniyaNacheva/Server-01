@@ -1,6 +1,10 @@
 const Product = require('../models/product');
 
-exports.getAll = () => Product.find({});
+exports.getAll = (ownerId) => {
+	const filter = ownerId ? { _ownerId: ownerId } : {};
+
+	return Product.find(filter);
+};
 
 exports.getOne = (id) => Product.findById(id);
 

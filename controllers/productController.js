@@ -3,7 +3,9 @@ const router = require('express').Router();
 const productService = require('../services/productService');
 
 router.get('/', async (req, res) => {
-	const products = await productService.getAll();
+	const ownerId = req.query.where ? req.query.where.match(/"([^"]+)"/)[1] : '';
+
+	const products = await productService.getAll(ownerId);
 
 	res.json(products);
 });
